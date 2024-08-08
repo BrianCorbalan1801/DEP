@@ -16,13 +16,14 @@ try:
         # Leer el valor del sensor desde el puerto serial
         if ser.in_waiting > 0:
             sensor_value = ser.readline().decode('utf-8').strip()
+            
             if sensor_value.isdigit():
                 sensor_value = int(sensor_value)
-                
                 # Obtener el timestamp actual
                 timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                 
                 # Insertar el valor y el timestamp en la base de datos
+                #print(sensor_value)
                 cursor.execute('''
                     INSERT INTO mediciones (valor_sensor, timestamp) VALUES (?, ?)
                 ''', (sensor_value, timestamp))
@@ -35,5 +36,5 @@ except KeyboardInterrupt:
     print("Interrupción del teclado recibida, cerrando la conexión...")
 finally:
     # Cerrar la conexión con la base de datos y el puerto serial
-    conn.close()
     ser.close()
+    conn.close()
